@@ -6,6 +6,7 @@ import React, {
   useContext,
   useMemo,
   useState,
+  useEffect
 } from "react";
 
 interface ConnectionContextType {
@@ -23,11 +24,11 @@ export function ConnectionProvider({children}: { children: ReactNode; }) {
   const [connection, setConnection] = useState<DAppConnection>();
 
   // Check if there is a currently active session
-  // useEffect(() => {
-  //   authorizeWallet()
-  //     .then((connection) => setConnection(connection))
-  //     .catch((_error) => {})
-  // }, []);
+  useEffect(() => {
+    authorizeWallet()
+      .then((connection) => setConnection(connection))
+      .catch((_error) => {})
+  }, []);
 
   function connectWallet() {
     authorizeWallet()

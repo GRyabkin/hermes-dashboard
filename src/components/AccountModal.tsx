@@ -98,6 +98,7 @@ export default function AccountModal({ isOpen, onClose }: Props) {
                 color="gray.400"
                 fontWeight="normal"
                 fontSize="sm"
+                onClick={connection ? () => {navigator.clipboard.writeText(connection.address)} : () => {}}
                 _hover={{
                   textDecoration: "none",
                   color: "whiteAlpha.800",
@@ -109,8 +110,7 @@ export default function AccountModal({ isOpen, onClose }: Props) {
                 fontSize="sm"
                 display="flex"
                 alignItems="center"
-                // https://tzkt.io/
-                href={connection && `${connection.tezos.rpc.getRpcUrl()}/${connection.address}`}
+                href={connection && `https://tzstats.com/${connection.address}`}
                 isExternal
                 color="gray.400"
                 ml={6}
