@@ -1,24 +1,49 @@
-import React from 'react';
-import logo from './logo.svg';
+import { NetworkType } from '@airgap/beacon-sdk';
+import React, { useState } from 'react';
 import './App.css';
 
+import { authorizeWallet, DAppConnection } from './authorization';
+
+function hasMessage(value: unknown): value is { message: string } {
+  return typeof value === 'object' && value !== null && 'message' in value;
+}
+
 function App() {
+  const [connection, setConnection] = useState<DAppConnection>();
+
+  const connectWallet = async () => {
+    try {
+      const connection = await authorizeWallet(NetworkType.HANGZHOUNET);
+      setConnection(connection);
+    } catch (e) {
+      if ((e as any)?.name === 'NotGrantedTempleWalletError') {
+        return;
+      }
+
+      const outputArg = hasMessage(e) ? e.message : e;
+      console.error(e);
+      alert(`Error: ${outputArg}`);
+    }
+  };
+
+  const resetConnection = async () => {
+    setConnection(undefined);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {connection ? (
+        <>
+          <span>Network: Hangzhounet</span>
+          <button onClick={resetConnection}>
+            {connection.pkh}
+          </button>
+        </>
+      ) : (
+        <>
+          <button onClick={connectWallet}>Connect</button>
+        </>
+      )}
     </div>
   );
 }
