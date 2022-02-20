@@ -1,30 +1,44 @@
-import { DAppClient, NetworkType } from "@airgap/beacon-sdk"
-import { act } from "react-dom/test-utils"
+import { DAppClient, NetworkType } from "@airgap/beacon-sdk";
+import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
+import { ReadOnlySigner } from './ReadOnlySigner';
 
 const appName = "Hermes Dashboard"
+
+export const client = new DAppClient({
+  name: appName,
+  iconUrl: `${process.env.REACT_APP_BASE_URL}/favicon.ico`
+})
+
+const michelEncoder = new MichelCodecPacker();
 
 export class WalletNotConnectedError extends Error {
     constructor() {
       super('Wallet was not connected');
     }
-  }
-
-export interface DAppConnection {
-    pkh: string;
-    pk: string;
 }
 
-const client = new DAppClient({
-    name: appName,
-    iconUrl: `${process.env.REACT_APP_BASE_URL}/favicon.ico`
-  })
+function rpcURL(network: NetworkType): string {
+    switch (network) {
+        case NetworkType.HANGZHOUNET:
+            return 'https://hangzhounet.smartpy.io'
+        default:
+            return 'https://mainnet-node.madfish.solutions'
+    }
+};
 
-export const authorizeWallet = async (newtwork: NetworkType = NetworkType.HANGZHOUNET): Promise<DAppConnection> => {
+export interface DAppConnection {
+    address: string;
+    pk: string;
+    balance: number;
+    tezos: TezosToolkit;
+}
+
+export const authorizeWallet = async (network: NetworkType = NetworkType.HANGZHOUNET): Promise<DAppConnection> => {
     
     var activeAccount = await client.getActiveAccount()
     if (!activeAccount) {
 
-        await client.requestPermissions( { network: { type: newtwork }} )
+        await client.requestPermissions( { network: { type: network }} )
             .catch((error) => {
                 console.log('error during permission request', error)
             }
@@ -35,7 +49,17 @@ export const authorizeWallet = async (newtwork: NetworkType = NetworkType.HANGZH
         throw new WalletNotConnectedError();
     }
 
-    const res = activeAccount;
-    console.log(res.address)
-    return { pkh: res.address, pk: res.publicKey }
+    if (!activeAccount.network.type) {
+        throw new Error("Please provide network type");
+    }
+    console.log(activeAccount.address, activeAccount.network.type)
+
+    const tezos = new TezosToolkit(rpcURL(activeAccount.network.type));
+    tezos.setPackerProvider(michelEncoder);
+    tezos.setSignerProvider(new ReadOnlySigner(activeAccount.address, activeAccount.publicKey));
+    
+    const wallet_balance = await tezos.tz.getBalance(activeAccount.address)
+    const balance = wallet_balance.toNumber() / 1000000
+
+    return { address: activeAccount.address, pk: activeAccount.publicKey, balance: balance, tezos }
 };

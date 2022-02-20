@@ -1,51 +1,25 @@
-import { NetworkType } from '@airgap/beacon-sdk';
-import React, { useState } from 'react';
+import { ChakraProvider, useDisclosure } from "@chakra-ui/react";
 import './App.css';
 
-import { authorizeWallet, DAppConnection } from './authorization';
-
-function hasMessage(value: unknown): value is { message: string } {
-  return typeof value === 'object' && value !== null && 'message' in value;
-}
+import AccountModal from "./components/AccountModal";
+import ConnectButton from "./components/ConnectButton";
+import Layout from './components/Layouts';
+import { ConnectionProvider } from "./connectionContext";
 
 function App() {
-  const [connection, setConnection] = useState<DAppConnection>();
 
-  const connectWallet = async () => {
-    try {
-      const connection = await authorizeWallet(NetworkType.HANGZHOUNET);
-      setConnection(connection);
-    } catch (e) {
-      if ((e as any)?.name === 'NotGrantedTempleWalletError') {
-        return;
-      }
-
-      const outputArg = hasMessage(e) ? e.message : e;
-      console.error(e);
-      alert(`Error: ${outputArg}`);
-    }
-  };
-
-  const resetConnection = async () => {
-    setConnection(undefined);
-  };
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
-    <div>
-      {connection ? (
-        <>
-          <span>Network: Hangzhounet</span>
-          <button onClick={resetConnection}>
-            {connection.pkh}
-          </button>
-        </>
-      ) : (
-        <>
-          <button onClick={connectWallet}>Connect</button>
-        </>
-      )}
-    </div>
-  );
+    <ChakraProvider>
+      <Layout>
+        <ConnectionProvider>
+          <ConnectButton handleOpenModal={onOpen} />
+          <AccountModal isOpen={isOpen} onClose={onClose} />
+        </ConnectionProvider>
+      </Layout>
+    </ChakraProvider>
+  )
 }
 
 export default App;
