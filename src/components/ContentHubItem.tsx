@@ -70,9 +70,11 @@ export default function ContentHubItem({ hub }: Props) {
                 </Stack>
                 <Box py={6} px={3}>
                     <Stack spacing={0} align={'center'} mb={5}>
-                        <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
-                            {hub.title}
-                        </Heading>
+                        <Box h={50}>
+                            <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
+                                {hub.title}
+                            </Heading>
+                        </Box>
                         <Box h={50}>
                             <Text p={1} noOfLines={2} color={'gray.500'}>{hub.description}</Text>
                         </Box>
