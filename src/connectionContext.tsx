@@ -23,7 +23,7 @@ const ConnectionContext = createContext<ConnectionContextType>(
 export function ConnectionProvider({children}: { children: ReactNode; }) {
   const [connection, setConnection] = useState<DAppConnection>();
 
-  // Check if there is a currently active session
+  // // Check if there is a currently active session
   // useEffect(() => {
   //   authorizeWallet()
   //     .then((connection) => setConnection(connection))
