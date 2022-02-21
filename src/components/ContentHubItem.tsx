@@ -20,9 +20,10 @@ export interface ContentHub {
     title: string;
     description: string;
     criteriaType: string;
-    criteriaToken: string;
+    criteriaToken?: string;
     criteriaCurrency: string;
     criteriaPrice: number;
+    disabled: boolean;
 }
 
 type Props = {
@@ -36,7 +37,7 @@ export default function ContentHubItem({ hub }: Props) {
             window.location.href = link
         )
     }
-    
+
     return (
         <Center py={6}>
             <Box
@@ -67,12 +68,14 @@ export default function ContentHubItem({ hub }: Props) {
                     <Spacer/>
                     <TGIcon width={30} height={30} />
                 </Stack>
-                <Box p={6}>
+                <Box py={6} px={3}>
                     <Stack spacing={0} align={'center'} mb={5}>
                         <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
                             {hub.title}
                         </Heading>
-                        <Text color={'gray.500'}>{hub.description}</Text>
+                        <Box h={50}>
+                            <Text p={1} noOfLines={2} color={'gray.500'}>{hub.description}</Text>
+                        </Box>
                     </Stack>
 
                     <Stack direction={'row'} justify={'center'} spacing={6}>
@@ -83,7 +86,7 @@ export default function ContentHubItem({ hub }: Props) {
                             </Text>
                         </Stack>
                         <Stack direction={'row'} align={'center'} spacing={2}>
-                            <Text noOfLines={2} fontWeight={800} fontSize={'xl'}>
+                            <Text fontWeight={800} fontSize={'xl'}>
                                 {hub.criteriaPrice}
                             </Text>
                             <XTZIcon width={24} height={24} />
@@ -93,6 +96,7 @@ export default function ContentHubItem({ hub }: Props) {
                     <Button
                         w={'full'}
                         mt={8}
+                        isDisabled={hub.disabled}
                         boxShadow={
                             '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
                         }
