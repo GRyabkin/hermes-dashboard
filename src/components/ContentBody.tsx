@@ -1,10 +1,8 @@
 import { CircularProgress } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { ApiService } from "../api/api_service";
+import { serviceApi } from "../api/api_service";
 import ContentHubsList, { ContentHubs } from "./ContentHubsList";
 import WelcomeMessage from "./WelcomeMessage";
-
-const serviceApi = new ApiService()
 
 export default function ContentBody() {
     

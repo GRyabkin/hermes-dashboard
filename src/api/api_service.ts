@@ -16,4 +16,18 @@ export class ApiService {
         const response = await fetch(`${proxy}/${baseUrl}/groups`, requestOptions);
         return await response.json();
     }
+
+    public async getInviteLink(groupId: number): Promise<any> {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        };
+        const response = await fetch(`${proxy}/${baseUrl}/link?groupID=${groupId}`, requestOptions);
+        return await response.json();
+    }
 }
+
+export const serviceApi = new ApiService()
