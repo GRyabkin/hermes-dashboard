@@ -12,7 +12,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon, CopyIcon } from "@chakra-ui/icons";
-import { client, DAppConnection } from '../authorization';
 import useConnectionContext from "../connectionContext";
 
 type Props = {
