@@ -31,6 +31,7 @@ export interface DAppConnection {
     pk: string;
     balance: number;
     tezos: TezosToolkit;
+    network: NetworkType;
 }
 
 export const authorizeWallet = async (network: NetworkType = NetworkType.HANGZHOUNET): Promise<DAppConnection> => {
@@ -60,6 +61,6 @@ export const authorizeWallet = async (network: NetworkType = NetworkType.HANGZHO
     
     const wallet_balance = await tezos.tz.getBalance(activeAccount.address)
     const balance = wallet_balance.toNumber() / 1000000
-
-    return { address: activeAccount.address, pk: activeAccount.publicKey, balance: balance, tezos }
+    
+    return { address: activeAccount.address, pk: activeAccount.publicKey, balance: balance, tezos, network }
 };

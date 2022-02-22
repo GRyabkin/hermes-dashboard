@@ -109,7 +109,7 @@ export default function AccountModal({ isOpen, onClose }: Props) {
                 fontSize="sm"
                 display="flex"
                 alignItems="center"
-                href={connection && `https://tzstats.com/${connection.address}`}
+                href={connection && `https://${connection.network}.tzkt.io/${connection.address}`}
                 isExternal
                 color="gray.400"
                 ml={6}
