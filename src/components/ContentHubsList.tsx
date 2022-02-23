@@ -19,6 +19,7 @@ export default function ContentHubsList({ hubs }: Props) {
         criteriaToken: undefined,
         criteriaCurrency: 'XTZ',
         criteriaPrice: 10000,
+        membersCount: 1482,
         disabled: true
     }
     

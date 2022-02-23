@@ -1,4 +1,4 @@
-import { CircularProgress } from "@chakra-ui/react";
+import { Center, CircularProgress } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { serviceApi } from "../api/api_service";
 import ContentHubsList, { ContentHubs } from "./ContentHubsList";
@@ -20,7 +20,7 @@ export default function ContentBody() {
     if (error) {
         return ( <WelcomeMessage message={`Sorry an unexpected error occurred (${error}). Please refresh the page to try again.`} /> )
     } else if (!isLoaded) {
-        return ( <CircularProgress isIndeterminate color='gray.500'/> )
+        return (<Center w={'100vw'} h={'60vh'}><CircularProgress isIndeterminate color='gray.500'/></Center> )
     } else {
         return ( <ContentHubsList hubs={data}/>)
     }

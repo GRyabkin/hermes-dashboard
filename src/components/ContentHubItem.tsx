@@ -14,6 +14,11 @@ import { ReactComponent as XTZIcon } from './svg/XTZ.svg';
 import { ReactComponent as TGIcon } from './svg/telegram.svg';
 import { serviceApi } from '../api/api_service';
 
+export const entryTypeNames = {
+    ownership: 'Ownership', 
+    balance: 'Min balance'
+}
+
 export interface ContentHub {
     id: number;
     title: string;
@@ -22,6 +27,7 @@ export interface ContentHub {
     criteriaToken?: string;
     criteriaCurrency: string;
     criteriaPrice: number;
+    membersCount: number;
     disabled: boolean;
 }
 
@@ -59,9 +65,9 @@ export default function ContentHubItem({ hub }: Props) {
                 </Flex>
                 <Stack direction={'row'} px={6}>
                     <Stack spacing={0} align={'center'}>
-                        <Text fontWeight={600}>23k</Text>
+                        <Text fontWeight={600}>{hub.membersCount}</Text>
                         <Text fontSize={'sm'} color={'gray.500'}>
-                            Followers
+                            Members
                         </Text>
                     </Stack>
                     <Spacer/>
@@ -79,21 +85,24 @@ export default function ContentHubItem({ hub }: Props) {
                         </Box>
                     </Stack>
 
-                    <Stack direction={'row'} justify={'center'} spacing={6}>
+                    <Stack direction={'row'} justify={'center'} spacing={6} m={5}>
                         <Stack spacing={0} direction={'column'}>
                             <Text align={'start'} fontWeight={600}>Entry</Text>
                             <Text align={'start'} fontSize={'sm'} color={'gray.500'}>
-                                Min balance
+                                {hub.criteriaType && hub.criteriaType == 'ownership' ? 'Ownership' : 'Min Balance'}
                             </Text>
                         </Stack>
+                        <Spacer/>
                         <Stack direction={'row'} align={'center'} spacing={2}>
-                            <Text fontWeight={800} fontSize={'xl'}>
-                                {hub.criteriaPrice}
-                            </Text>
-                            <XTZIcon width={24} height={24} />
+                            {hub.criteriaType && hub.criteriaType == 'balance' ?
+                                <><Text fontWeight={800} fontSize={'xl'}>
+                                    {hub.criteriaPrice}
+                                </Text><XTZIcon width={24} height={24} /></>
+                                : <></>
+                            }
                         </Stack>
                     </Stack>
-
+                    
                     <Button
                         w={'full'}
                         mt={8}
